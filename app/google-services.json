@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "197660892489",
+    "firebase_url": "https://stravaforcats.firebaseio.com",
+    "project_id": "stravaforcats",
+    "storage_bucket": "stravaforcats.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197660892489:android:4747aa561b0e7da8",
+        "android_client_info": {
+          "package_name": "com.example.katrinaglaeser.stavaforcats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197660892489-uirltve1tk58u27lbha7afarih5fqguq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.katrinaglaeser.stavaforcats",
+            "certificate_hash": "2d7bb0a70d0b3d1615f887c40a2eb0425f27a9db"
+          }
+        },
+        {
+          "client_id": "197660892489-5bj40174vf6g4vb6r7l952ib0ffa7hjf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0lTSGQ68cB3PM9Y9pVPMXnNv4_9ZAIP4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197660892489-5bj40174vf6g4vb6r7l952ib0ffa7hjf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

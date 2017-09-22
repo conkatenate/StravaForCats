@@ -71,24 +71,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mUsername = ANONYMOUS;
+
+
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Initialize references to views
-        //mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        //mMessageListView = (ListView) findViewById(R.id.messageListView);
         //mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
         //mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         //mSendButton = (Button) findViewById(R.id.sendButton);
 
-        // Initialize progress bar
-        //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        //initialize where there is a postListView in activity_main.xml
+        // mPostListView = (ListView) findViewById(R.id.postListView);
 
+        //initialize later when there is a progress bar in the layout
+        //mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//This was working before
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -99,25 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    /*mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                //user is signed in
-                Toast.makeText(MainActivity.this, "You are now signed in. Welcome to KatFriendlyChat!", Toast.LENGTH_SHORT).show();
-            } else {
-                //user is signed out
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setProviders(
-                                        AuthUI.EMAIL_PROVIDER,
-                                        AuthUI.GOOGLE_PROVIDER)
-                                .build(),
-                        RC_SIGN_IN);
-    */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

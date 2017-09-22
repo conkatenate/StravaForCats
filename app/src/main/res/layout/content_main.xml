@@ -8,13 +8,18 @@
     tools:context="com.example.katrinaglaeser.stavaforcats.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <ListView
+        android:id="@+id/messageListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You haven't done anything today!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_above="@+id/linearLayout"
+        android:stackFromBottom="true"
+        android:divider="@android:color/transparent"
+        android:transcriptMode="alwaysScroll"
+        tools:listitem="@layout/item_post"
+        tools:layout_editor_absoluteY="6dp"
+        tools:layout_editor_absoluteX="8dp" />
+
+
 
 </android.support.constraint.ConstraintLayout>

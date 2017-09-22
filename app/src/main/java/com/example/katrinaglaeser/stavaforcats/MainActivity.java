@@ -1,6 +1,7 @@
 package com.example.katrinaglaeser.stavaforcats;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -47,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ListView mMessageListView;
-    //private MessageAdapter mMessageAdapter;
+    private PostAdapter mPostAdapter;
     private ProgressBar mProgressBar;
     private ImageButton mPhotoPickerButton;
-    private EditText mMessageEditText;
+    private EditText mPostEditText;
     private Button mSendButton;
     private ListView mPostListView;
 
@@ -81,17 +82,87 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize references to views
         mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+        //message-> post marker cleanup to do:
+        mPostEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
 
         mPostListView = (ListView) findViewById(R.id.postListView);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-//This was working before
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        // ImagePickerButton shows an image picker to upload a image for a message
+        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Fire an intent to show an image picker
+            }
+        });
+
+
+        // Enable Send button when there's text to send
+        mPostEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().trim().length() > 0) {
+                    mSendButton.setEnabled(true);
+                } else {
+                    mSendButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+        mPostEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
+
+        // Send button sends a message and clears the EditText
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InactivityForCats inactivityForCats = new InactivityForCats(mPostEditText.getText().toString(), mUsername, null);
+                mMessagesDatabaseReference.push().setValue(inactivityForCats);
+
+                // Clear input box
+                mPostEditText.setText("");
+            }
+        });
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+
+
+                    onSignedInInitialize(user.getDisplayName());
+                    Toast.makeText(MainActivity.this, "You're now signed in. Welcome to FriendlyChat.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // User is signed out
+
+                    onSignedOutCleanup();
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setProviders(
+                                            AuthUI.EMAIL_PROVIDER,
+                                            AuthUI.GOOGLE_PROVIDER)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
+
+        //marker
 
         //I think i can just remove this
         /*
@@ -103,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         }); */
+
+
     }
 
     @Override
@@ -126,4 +199,52 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    private void onSignedInInitialize(String username) {
+        mUsername = username;
+        attachDatabaseReadListener();
+    }
+    private void onSignedOutCleanup(){
+        mUsername = ANONYMOUS;
+        //// FIXME: 9/22/17
+        //mMessageAdapter.clear();
+        dettachDatabaseReadListener();
+
+    }
+    private void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    InactivityForCats inactivityForCats = dataSnapshot.getValue(InactivityForCats.class);
+                    //// FIXME: 9/22/17
+                    //mPostAdapter.add(friendlyMessage);
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+    private void dettachDatabaseReadListener(){
+        if (mChildEventListener != null) {
+            mMessagesDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+    //// FIXME: 9/22/17
+    /*
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+        mMessageAdapter.clear();
+        dettachDatabaseReadListener();
+    }
+    */
+
 }

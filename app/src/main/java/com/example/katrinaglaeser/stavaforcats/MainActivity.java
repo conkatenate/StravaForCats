@@ -1,5 +1,6 @@
 package com.example.katrinaglaeser.stavaforcats;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -185,6 +186,22 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //This is maybe  causing the app to crash
+    /*
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode, data);
+        if (requestCode == RC_SIGN_IN){
+            if (resultCode == RESULT_OK){
+                Toast.makeText(this, "You are signed in." , Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED){
+                Toast.makeText(this, "Sign in Cancelled" , Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+     */
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -206,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     private void onSignedOutCleanup(){
         mUsername = ANONYMOUS;
         //// FIXME: 9/22/17
-        //mMessageAdapter.clear();
+        //mPostAdapter.clear();
         dettachDatabaseReadListener();
 
     }
@@ -216,8 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     InactivityForCats inactivityForCats = dataSnapshot.getValue(InactivityForCats.class);
-                    //// FIXME: 9/22/17
-                    //mPostAdapter.add(friendlyMessage);
+                    mPostAdapter.add(inactivityForCats);
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -234,15 +250,21 @@ public class MainActivity extends AppCompatActivity {
             mChildEventListener = null;
         }
     }
-    //// FIXME: 9/22/17
+    //Lets see if this will keep the app from crashing
     /*
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
-        mMessageAdapter.clear();
+        mPostAdapter.clear();
         dettachDatabaseReadListener();
     }
     */

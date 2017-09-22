@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
+    private ListView mPostListView;
 
 
     // I'll have to add in functionality for this later
@@ -79,20 +80,21 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Initialize references to views
-        //mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-        //mMessageEditText = (EditText) findViewById(R.id.messageEditText);
-        //mSendButton = (Button) findViewById(R.id.sendButton);
+        mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
+        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+        mSendButton = (Button) findViewById(R.id.sendButton);
 
-        //initialize where there is a postListView in activity_main.xml
-        // mPostListView = (ListView) findViewById(R.id.postListView);
+        mPostListView = (ListView) findViewById(R.id.postListView);
 
-        //initialize later when there is a progress bar in the layout
-        //mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 //This was working before
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
+
+        //I think i can just remove this
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        }); */
     }
 
     @Override

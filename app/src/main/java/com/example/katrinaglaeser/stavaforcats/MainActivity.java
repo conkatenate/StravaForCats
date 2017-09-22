@@ -39,6 +39,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
+        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("posts");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Initialize references to views
@@ -91,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+
+        // Initialize post ListView and its adapter
+
+        final List<InactivityForCats> inactivityForCatses= new ArrayList<>();
+        mPostAdapter = new PostAdapter(this, R.layout.item_post, inactivityForCatses);
+        mPostListView.setAdapter(mPostAdapter);
+
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -101,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 // TODO: Fire an intent to show an image picker
             }
         });
+        // Initialize progress bar
+        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
 
         // Enable Send button when there's text to send
@@ -145,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     onSignedInInitialize(user.getDisplayName());
-                    Toast.makeText(MainActivity.this, "You're now signed in. Welcome to FriendlyChat.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Sweatpants time!.", Toast.LENGTH_SHORT).show();
                 } else {
                     // User is signed out
 
@@ -182,12 +195,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     //This is maybe  causing the app to crash
-    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode, data);
@@ -199,31 +212,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-     */
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.sign_out_menu:
+                AuthUI.getInstance().signOut(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        //return super.onOptionsItemSelected(item);
     }
+
+
     private void onSignedInInitialize(String username) {
         mUsername = username;
         attachDatabaseReadListener();
     }
     private void onSignedOutCleanup(){
         mUsername = ANONYMOUS;
-        //// FIXME: 9/22/17
-        //mPostAdapter.clear();
+        mPostAdapter.clear();
         dettachDatabaseReadListener();
 
     }
@@ -251,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //Lets see if this will keep the app from crashing
-    /*
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -267,6 +276,6 @@ public class MainActivity extends AppCompatActivity {
         mPostAdapter.clear();
         dettachDatabaseReadListener();
     }
-    */
+
 
 }

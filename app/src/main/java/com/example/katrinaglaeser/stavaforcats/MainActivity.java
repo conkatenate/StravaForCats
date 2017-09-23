@@ -241,7 +241,9 @@ public class MainActivity extends AppCompatActivity {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //// FIXME: 9/22/17  I think the problem with messages now showing up comes from here
                     InactivityForCats inactivityForCats = dataSnapshot.getValue(InactivityForCats.class);
+                    System.out.print(InactivityForCats.class);
                     mPostAdapter.add(inactivityForCats);
                 }
 
